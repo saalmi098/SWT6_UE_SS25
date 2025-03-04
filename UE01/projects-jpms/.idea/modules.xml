@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/modular-timer-bean/modular-timer-bean.iml" filepath="$PROJECT_DIR$/modular-timer-bean/modular-timer-bean.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modular-timer-client/modular-timer-client.iml" filepath="$PROJECT_DIR$/modular-timer-client/modular-timer-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nonmodular-timer-bean/nonmodular-timer-bean.iml" filepath="$PROJECT_DIR$/nonmodular-timer-bean/nonmodular-timer-bean.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nonmodular-timer-client/nonmodular-timer-client.iml" filepath="$PROJECT_DIR$/nonmodular-timer-client/nonmodular-timer-client.iml" />
+    </modules>
+  </component>
+</project>
