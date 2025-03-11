@@ -4,9 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import swt6.orm.domain.Address;
-import swt6.orm.domain.Employee;
-import swt6.orm.domain.LogbookEntry;
+import swt6.orm.domain.*;
 import swt6.util.JpaUtil;
 
 import java.time.LocalDate;
@@ -19,7 +17,6 @@ import static swt6.util.JpaUtil.executeInTransaction;
 public class WorkLogManager {
     // V1
     private static void insertEmployeeV1(Employee employee) {
-
 
         try (EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("WorkLogPU")) {
             EntityManager em = emFactory.createEntityManager();
@@ -133,9 +130,17 @@ public class WorkLogManager {
             System.out.println("--------- create schema ---------");
             JpaUtil.getEntityManagerFactory();
 
-            Employee emp1 = new Employee("Franz", "Mayr", LocalDate.of(1990, 01, 01));
-            emp1.setAddress(new Address("4232", "Hagenberg", "Softwarepark 11"));
-            Employee emp2 = new Employee("Susi", "Sorglos", LocalDate.of(2000, 03, 06));
+            var pe = new PermanentEmployee("Franz", "Mayr", LocalDate.of(1990, 01, 01));
+            pe.setSalary(5000.0);
+            pe.setAddress(new Address("4232", "Hagenberg", "Softwarepark 11"));
+            Employee emp1 = pe;
+
+            var te = new TemporaryEmployee("Susi", "Sorglos", LocalDate.of(2000, 03, 06));
+            te.setHourlyRate(50.0);
+            te.setRenter("Microsoft");
+            te.setStartDate(LocalDate.of(2025, 01, 01));
+            te.setEndDate(LocalDate.of(2025, 12, 31));
+            Employee emp2 = te;
 
             // Problem V1: Es wird nur 1 Employee in die Datenbank eingefuegt, da Factory doppelt erzeugt wird und bei jedem Erzeugen die Datenbank neu erstellt wird
             // (siehe auch Kommentar in persistence.xml)

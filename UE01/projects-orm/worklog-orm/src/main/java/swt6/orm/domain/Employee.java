@@ -9,6 +9,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+//@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // default
+@DiscriminatorColumn(name="employee_type", discriminatorType = DiscriminatorType.CHAR)
+@DiscriminatorValue("E")
+
 @Getter
 @Setter
 @NoArgsConstructor
