@@ -3,6 +3,7 @@ package swt6.orm.domain;
 import java.io.Serial;
 import java.io.Serializable;
 
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -11,7 +12,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
+// V2 (OneToOne)
+//@Entity
+
+// V3 (Embedded)
+@Embeddable
+
 @Setter
 @Getter
 @ToString
@@ -20,8 +26,12 @@ public class Address implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
 
-  @Id @GeneratedValue
-  private Long     id;
+  // V2 (OneToOne)
+//  @Id @GeneratedValue
+//  private Long     id;
+
+  // V3 (Embedded): Keine ID Property!
+
   private String   zipCode;
   private String   city;
   private String   street;

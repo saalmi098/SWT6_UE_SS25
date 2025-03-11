@@ -37,9 +37,16 @@ public class Employee implements Serializable { // Serializable keine Voraussetz
     // (V1) Unidirektionale Beziehung: Employee kennt LogbookEntry, aber LogbookEntry kennt Employee nicht
     // -> hat zur Folge, dass LogbookEntry nichts von Employees weiss, daher wird eine Zwischentabelle angelegt
 
+    // V2: Address wird in einer eigenen Tabelle abgelegt (OneToOne)
     // Default-Verhalten (ohne @OneToOne): Address wird in Employee-Tabelle eingebettet (Address wird serialisiert)
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ADDRESS_ID") // optional (ADDRESS_ID ist bereits default)
+//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "ADDRESS_ID") // optional (ADDRESS_ID ist bereits default)
+
+    // V3: Embedded (Address wird in Employee-Tabelle eingebettet)
+    @Embedded
+    @AttributeOverride(name = "zipCode", column = @Column(name = "address_zipCode"))
+    @AttributeOverride(name = "city", column = @Column(name = "address_city"))
+    @AttributeOverride(name = "street", column = @Column(name = "address_street"))
     @ToString.Exclude
     private Address address;
 
