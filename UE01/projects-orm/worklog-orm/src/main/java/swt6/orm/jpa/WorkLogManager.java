@@ -1,5 +1,6 @@
 package swt6.orm.jpa;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.*;
 import swt6.orm.domain.*;
 import swt6.util.JpaUtil;
@@ -74,7 +75,7 @@ public class WorkLogManager {
         // Ganz wichtig: merge gibt eine Referenz auf das Objekt zurueck, das in der Datenbank verwaltet wird
         // -> das zurueckgegebene Objekt ist immer ein persistentes Objekt!!!!! (auf jeden Fall merken)
 
-        return executeInTransaction(em -> (T)em.merge(entity));
+        return executeInTransaction(em -> (T) em.merge(entity));
     }
 
     private static Employee addLogbookEntries(Employee emp, LogbookEntry... entries) {
@@ -160,6 +161,47 @@ public class WorkLogManager {
         });
     }
 
+    // Vorteil: Objekte statt Strings -> Typsicher, keine Tippfehler
+    private static void listEntriesOfEmployeeQueryDsl(Employee emp) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        executeInTransaction(em -> {
+            JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+            QLogbookEntry logbookEntry = QLogbookEntry.logbookEntry;
+
+//            var query = queryFactory.select(logbookEntry)
+//                    .from(logbookEntry)
+//                    .where(logbookEntry.employee.eq(emp));
+
+//            var query = queryFactory.selectFrom(logbookEntry)
+//                    .where(logbookEntry.employee.eq(emp));
+
+            queryFactory.select(logbookEntry.activity, logbookEntry.startTime, logbookEntry.endTime)
+                    .from(logbookEntry)
+                    .where(logbookEntry.employee.eq(emp))
+                    .orderBy(logbookEntry.startTime.asc())
+                    .fetch()
+                    .forEach(tuple -> System.out.printf("%s: %s - %s%n", tuple.get(logbookEntry.activity),
+                            tuple.get(logbookEntry.startTime),
+                            tuple.get(logbookEntry.endTime)));
+        });
+    }
+
+    private static void listEmployeesWithMatchingActivitiesQueryDsl(String pattern) {
+        executeInTransaction(em -> {
+            JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+            QLogbookEntry logbookEntry = QLogbookEntry.logbookEntry;
+            QEmployee employee = QEmployee.employee;
+
+            queryFactory.selectFrom(employee)
+                    .innerJoin(employee.logbookEntries, logbookEntry)
+                    .on(logbookEntry.activity.like(pattern))
+                    .distinct()
+                    .fetch()
+                    .forEach(System.out::println);
+        });
+    }
+
     private static <T> Optional<T> findAny(Class<T> entityClass) {
         return executeInTransaction(em -> {
             Optional<T> entity =
@@ -171,7 +213,7 @@ public class WorkLogManager {
 
     private static void testFetchingStrategies() {
         // prepare: fetch valid ids for employee and logbookEntry
-        var anyEmpl  = findAny(Employee.class);
+        var anyEmpl = findAny(Employee.class);
         var anyEntry = findAny(LogbookEntry.class);
         if (anyEmpl.isEmpty() || anyEntry.isEmpty()) return;
 
@@ -261,6 +303,12 @@ public class WorkLogManager {
 
             System.out.println("--------- loadEmployeesWithEntries ---------");
             loadEmployeesWithEntries();
+
+            System.out.println("--------- listEntriesOfEmployeeQueryDsl ---------");
+            listEntriesOfEmployeeQueryDsl(emp1);
+
+            System.out.println("--------- listEmployeesWithMatchingActivitiesQueryDsl ---------");
+            listEmployeesWithMatchingActivitiesQueryDsl("Analyse");
 
 //            System.out.println("--------- testFetchingStrategies ---------");
 //            testFetchingStrategies();
