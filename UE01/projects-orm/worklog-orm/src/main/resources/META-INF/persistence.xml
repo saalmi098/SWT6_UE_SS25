@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+						 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+						 xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
+						 version="3.1">
+
+	<persistence-unit name="WorkLogPU">
+		<!-- The provider only needs to be set if you use several JPA providers -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<!-- AS: Hier steht Provider, da dies ein Service ist -->
+
+		<properties>
+			<!-- Scan for annotated classes. The specification only requires 
+				managed providers to implement this feature. So, unmanaged providers
+				may not provide it. Only works if entity names are unique. -->
+			<property name="hibernate.archive.autodetection" value="class" />
+
+			<!-- JPA 3.0 standard properties -->
+			<property name="jakarta.persistence.jdbc.driver"
+			          value="org.apache.derby.jdbc.ClientDriver" />
+			<property name="jakarta.persistence.jdbc.url"
+				        value="jdbc:derby://localhost/WorkLogDb;create=true" />
+
+			<property name="hibernate.dialect"
+				        value="org.hibernate.dialect.DerbyDialect" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+
+			<!-- AS: Einstellung gibt an, was passiert, wenn die EntityManagerFactory erzeugt wird.
+			D.h. Methode, die EntityManagerFactory erzeugt und einen Employee inserted, 2x aufrufen -> Employee
+			erscheint nur 1x, da Datenbank neu erzeugt wird ("create") -->
+			<property name="hibernate.hbm2ddl.auto" value="create" />
+		</properties>
+	</persistence-unit>
+</persistence>
