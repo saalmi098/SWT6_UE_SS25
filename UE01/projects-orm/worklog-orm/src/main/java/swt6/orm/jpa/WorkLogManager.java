@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import swt6.orm.domain.Address;
 import swt6.orm.domain.Employee;
 import swt6.orm.domain.LogbookEntry;
 import swt6.util.JpaUtil;
@@ -107,6 +108,11 @@ public class WorkLogManager {
             List<Employee> empList = em.createQuery("select e from Employee e", Employee.class).getResultList();
             empList.forEach(e -> {
                 System.out.println(e);
+
+                if (e.getAddress() != null) {
+                    System.out.printf("  address: %s%n", e.getAddress());
+                }
+
                 if (!e.getLogbookEntries().isEmpty()) {
                     System.out.println("  logbookEntries:");
                     e.getLogbookEntries().forEach(
@@ -128,6 +134,7 @@ public class WorkLogManager {
             JpaUtil.getEntityManagerFactory();
 
             Employee emp1 = new Employee("Franz", "Mayr", LocalDate.of(1990, 01, 01));
+            emp1.setAddress(new Address("4232", "Hagenberg", "Softwarepark 11"));
             Employee emp2 = new Employee("Susi", "Sorglos", LocalDate.of(2000, 03, 06));
 
             // Problem V1: Es wird nur 1 Employee in die Datenbank eingefuegt, da Factory doppelt erzeugt wird und bei jedem Erzeugen die Datenbank neu erstellt wird

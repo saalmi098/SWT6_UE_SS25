@@ -37,6 +37,12 @@ public class Employee implements Serializable { // Serializable keine Voraussetz
     // (V1) Unidirektionale Beziehung: Employee kennt LogbookEntry, aber LogbookEntry kennt Employee nicht
     // -> hat zur Folge, dass LogbookEntry nichts von Employees weiss, daher wird eine Zwischentabelle angelegt
 
+    // Default-Verhalten (ohne @OneToOne): Address wird in Employee-Tabelle eingebettet (Address wird serialisiert)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "ADDRESS_ID") // optional (ADDRESS_ID ist bereits default)
+    @ToString.Exclude
+    private Address address;
+
     public Employee(String firstName, String lastName, LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         this.lastName = lastName;
