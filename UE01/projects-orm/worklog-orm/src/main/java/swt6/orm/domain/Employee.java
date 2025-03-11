@@ -2,6 +2,7 @@ package swt6.orm.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -34,10 +35,18 @@ public class Employee implements Serializable { // Serializable keine Voraussetz
     private String lastName;
     private LocalDate dateOfBirth;
 
+    // @OneToMany fetching strategies:
+    //   [FetchMode.JOIN]    FetchType.EAGER   1 join, eager fetch
+    //   FetchMode.SELECT    FetchType.EAGER   2 selects, eager fetch
+    //   [FetchMode.SELECT]  [FetchType.LAZY]  2 selects, lazy fetch
+    //   FetchMode.JOIN      [FetchType.LAZY]  contradictory
+    // Default fetch strategy: LAZY (bei Collections)
+    @org.hibernate.annotations.Fetch(FetchMode.SELECT) // nur in Hibernate verfuegbar (nicht in JPA)
+
     // CascadeType.ALL ... loesche ich einen Employee, dann werden auch alle LogbookEntries geloescht; fuege ich einen neuen Employee hinzu, dann werden auch alle LogbookEntries hinzugefuegt etc.
     // auf dieser Seite macht ALL Sinn, auf der Seite des LogbookEntries aber nicht (loescht man einen LogbookEntry, dann wird auch der Employee geloescht)
     // mappedBy... LogbookEntry verwaltet Fremdschluessel = Owning-Side (die Seite, die den Fremdschluessel hat) -> auf der anderen Seite steht mappedBy
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Setter(AccessLevel.PRIVATE)
     @ToString.Exclude
     private Set<LogbookEntry> logbookEntries = new HashSet<>();

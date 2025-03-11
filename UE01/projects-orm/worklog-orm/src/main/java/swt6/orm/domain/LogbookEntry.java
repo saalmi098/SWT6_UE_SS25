@@ -2,6 +2,7 @@ package swt6.orm.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.FetchMode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -23,8 +24,16 @@ public class LogbookEntry implements Serializable {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
+    // @ManyToOne fetching strategies:
+    //  [FetchMode.JOIN]    [FetchType.EAGER]   1 join, eager fetch
+    //  FetchMode.SELECT    [FetchType.EAGER]   2 selects, eager fetch
+    //  [FetchMode.SELECT]  FetchType.LAZY      2 selects, lazy fetch
+    //  FetchMode.JOIN      FetchType.LAZY      contradictory
+    // Default fetch strategy: EAGER JOIN
+
+    @org.hibernate.annotations.Fetch(FetchMode.JOIN)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     // (V2) Bidirektionale Beziehung: Employee kennt LogbookEntry und LogbookEntry kennt Employee
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Employee employee;
 
     public LogbookEntry(String activity, LocalDateTime startTime, LocalDateTime endTime) {

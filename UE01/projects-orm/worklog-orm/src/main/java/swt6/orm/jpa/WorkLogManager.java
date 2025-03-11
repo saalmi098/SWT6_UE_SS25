@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static swt6.util.JpaUtil.executeInTransaction;
 
@@ -138,6 +140,51 @@ public class WorkLogManager {
         });
     }
 
+    private static <T> Optional<T> findAny(Class<T> entityClass) {
+        return executeInTransaction(em -> {
+            Optional<T> entity =
+                    em.createQuery("select le from %s le".formatted(entityClass.getSimpleName()), entityClass).setMaxResults(1)
+                            .getResultList().stream().findAny();
+            return entity;
+        });
+    }
+
+    private static void testFetchingStrategies() {
+        // prepare: fetch valid ids for employee and logbookEntry
+        var anyEmpl  = findAny(Employee.class);
+        var anyEntry = findAny(LogbookEntry.class);
+        if (anyEmpl.isEmpty() || anyEntry.isEmpty()) return;
+
+        System.out.println("############################################");
+
+        executeInTransaction(em -> {
+            Long entryId = anyEntry.get().getId();
+            System.out.println("###> Fetching LogbookEntry ...");
+            LogbookEntry entry = em.find(LogbookEntry.class, entryId);
+            System.out.println("###> Fetched LogbookEntry");
+            Employee empl1 = entry.getEmployee();
+            System.out.println("###> Fetched associated Employee");
+            System.out.println(empl1);
+            System.out.println("###> Accessed associated Employee");
+        });
+
+        System.out.println("############################################");
+
+        executeInTransaction(em -> {
+            Long emplId = anyEmpl.get().getId();
+            System.out.println("###> Fetching Employee ...");
+            Employee empl2 = em.find(Employee.class, emplId);
+            System.out.println("###> Fetched Employee");
+            Set<LogbookEntry> entries = empl2.getLogbookEntries();
+            System.out.println("###> Fetched associated entries");
+            for (LogbookEntry e : entries)
+                System.out.println("  " + e);
+            System.out.println("###> Accessed associated entries");
+        });
+
+        System.out.println("############################################");
+    }
+
     public static void main(String[] args) {
         // Datenbank starten: Maven View -> worklog-orm -> Run Configurations -> Start DB
 
@@ -188,6 +235,9 @@ public class WorkLogManager {
 
             System.out.println("--------- listEmployees (2) ---------");
             listEmployees();
+
+            System.out.println("--------- testFetchingStrategies ---------");
+            testFetchingStrategies();
         } finally {
             JpaUtil.closeEntityManagerFactory();
         }

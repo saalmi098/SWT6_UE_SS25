@@ -24,7 +24,7 @@
 			<property name="hibernate.dialect"
 				        value="org.hibernate.dialect.DerbyDialect" />
 			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.format_sql" value="true" />
 
 			<!-- AS: Einstellung gibt an, was passiert, wenn die EntityManagerFactory erzeugt wird.
 			D.h. Methode, die EntityManagerFactory erzeugt und einen Employee inserted, 2x aufrufen -> Employee
