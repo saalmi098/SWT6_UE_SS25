@@ -1,9 +1,6 @@
 package swt6.orm.jpa;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 import swt6.orm.domain.*;
 import swt6.util.JpaUtil;
 
@@ -140,6 +137,29 @@ public class WorkLogManager {
         });
     }
 
+    private static void listEntriesOfEmployee(Employee emp) {
+        executeInTransaction(em -> {
+            System.out.printf("logbook entries of employee: %s (%d)%n",
+                    emp.getLastName(), emp.getId());
+
+            TypedQuery<LogbookEntry> qry = em.createQuery("select le from LogbookEntry le where le.employee=:empl", LogbookEntry.class);
+            qry.setParameter("empl", emp);
+
+            qry.getResultList().forEach(e -> System.out.printf("    %s%n", e));
+        });
+    }
+
+    private static void loadEmployeesWithEntries() {
+        executeInTransaction(em -> {
+            // Erweiterung "join fetch": Default-Verhalten ueberschreiben und die assoziierten LogbookEntries sofort mitladen (selbst wenn Lazy-Loading in Mapping definiert ist)
+            TypedQuery<Employee> qry = em.createQuery("select e from Employee e join fetch e.logbookEntries", Employee.class);
+            qry.getResultList().forEach(e -> {
+                System.out.println(e);
+                e.getLogbookEntries().forEach(le -> System.out.println("  " + le));
+            });
+        });
+    }
+
     private static <T> Optional<T> findAny(Class<T> entityClass) {
         return executeInTransaction(em -> {
             Optional<T> entity =
@@ -236,8 +256,14 @@ public class WorkLogManager {
             System.out.println("--------- listEmployees (2) ---------");
             listEmployees();
 
-            System.out.println("--------- testFetchingStrategies ---------");
-            testFetchingStrategies();
+            System.out.println("--------- listEntriesOfEmployee ---------");
+            listEntriesOfEmployee(emp1);
+
+            System.out.println("--------- loadEmployeesWithEntries ---------");
+            loadEmployeesWithEntries();
+
+//            System.out.println("--------- testFetchingStrategies ---------");
+//            testFetchingStrategies();
         } finally {
             JpaUtil.closeEntityManagerFactory();
         }
