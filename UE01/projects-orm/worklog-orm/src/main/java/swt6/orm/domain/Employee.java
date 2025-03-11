@@ -57,6 +57,12 @@ public class Employee implements Serializable { // Serializable keine Voraussetz
     @ToString.Exclude
     private Address address;
 
+    @ElementCollection // default: Tabelle EMPLOYEE_PHONES (EMPLOYEE_ID (FK), PHONES)
+    @CollectionTable(name = "EMPL_PHONES", joinColumns = @JoinColumn(name = "EMPL_ID")) // optional (Tabelle EMPL_PHONES (EMPL_ID (FK), PHONES))
+    @Column(name = "PHONE_NR")
+    @ToString.Exclude
+    private Set<String> phones = new HashSet<>();
+
     public Employee(String firstName, String lastName, LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
         this.lastName = lastName;
@@ -70,5 +76,9 @@ public class Employee implements Serializable { // Serializable keine Voraussetz
 
         logbookEntries.add(entry);
         entry.setEmployee(this);
+    }
+
+    public void addPhone(String phone) {
+        phones.add(phone);
     }
 }

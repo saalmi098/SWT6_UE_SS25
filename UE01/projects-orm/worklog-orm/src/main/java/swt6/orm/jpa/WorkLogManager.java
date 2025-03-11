@@ -96,6 +96,18 @@ public class WorkLogManager {
         });
     }
 
+    private static Employee addPhones(Employee emp, String... phones) {
+        return executeInTransaction(em -> {
+            var persEmp = em.merge(emp); // employee wird wieder persistent
+
+            for (String phone : phones) {
+                persEmp.addPhone(phone);
+            }
+
+            return persEmp;
+        });
+    }
+
     private static void listEmployees() {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -108,6 +120,11 @@ public class WorkLogManager {
 
                 if (e.getAddress() != null) {
                     System.out.printf("  address: %s%n", e.getAddress());
+                }
+
+                if (!e.getPhones().isEmpty()) {
+                    System.out.println("  phone numbers:");
+                    e.getPhones().forEach(p -> System.out.printf("    %s%n", p));
                 }
 
                 if (!e.getLogbookEntries().isEmpty()) {
@@ -165,6 +182,9 @@ public class WorkLogManager {
             System.out.println("--------- addLogbookEntries ---------");
             emp1 = addLogbookEntries(emp1, entry1, entry2);
             emp2 = addLogbookEntries(emp2, entry3);
+
+            System.out.println("--------- addPhones ---------");
+            emp1 = addPhones(emp1, "(07543) 123 4567)", "(0664) 123 4567");
 
             System.out.println("--------- listEmployees (2) ---------");
             listEmployees();
