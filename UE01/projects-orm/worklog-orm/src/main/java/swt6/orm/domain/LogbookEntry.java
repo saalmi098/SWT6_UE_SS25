@@ -1,8 +1,6 @@
 package swt6.orm.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -24,4 +22,14 @@ public class LogbookEntry implements Serializable {
     private String activity;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+
+    // (V2) Bidirektionale Beziehung: Employee kennt LogbookEntry und LogbookEntry kennt Employee
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Employee employee;
+
+    public LogbookEntry(String activity, LocalDateTime startTime, LocalDateTime endTime) {
+        this.activity = activity;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

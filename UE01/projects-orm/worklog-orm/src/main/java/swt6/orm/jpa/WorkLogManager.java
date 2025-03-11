@@ -5,9 +5,12 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import swt6.orm.domain.Employee;
+import swt6.orm.domain.LogbookEntry;
 import swt6.util.JpaUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static swt6.util.JpaUtil.executeInTransaction;
@@ -77,12 +80,41 @@ public class WorkLogManager {
         return executeInTransaction(em -> (T)em.merge(entity));
     }
 
+    private static Employee addLogbookEntries(Employee emp, LogbookEntry... entries) {
+        // employee ist hier detached
+
+        return executeInTransaction(em -> {
+            // employee wird persistent mit merge
+            var persEmp = em.merge(emp);
+
+            // VOR for-schleife mergen: Automatic Dirty Checking (Hibernate) -> Hibernate ueberwacht die Objekte im First Level Cache und schreibt die Aenderungen in die Datenbank
+
+            for (LogbookEntry entry : entries) {
+                persEmp.addLogbookEntry(entry);
+                // hier greift Automatic Dirty Checking Mechanismus -> schreibt die Aenderungen in die Datenbank
+            }
+
+            return persEmp;
+        });
+    }
+
     private static void listEmployees() {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
         executeInTransaction(em -> {
             // JPQL ... Java Persistence Query Language (in UE01 mit Hibernate war es HQL)
             // JPQL ist ein Subset von HQL (jedes gueltige JPQL-Statement ist auch ein gueltiges HQL-Statement, aber nicht umgekehrt)
             List<Employee> empList = em.createQuery("select e from Employee e", Employee.class).getResultList();
-            empList.forEach(System.out::println);
+            empList.forEach(e -> {
+                System.out.println(e);
+                if (!e.getLogbookEntries().isEmpty()) {
+                    System.out.println("  logbookEntries:");
+                    e.getLogbookEntries().forEach(
+                            l -> System.out.printf("    %s: %s - %s%n", l.getActivity(),
+                                    l.getStartTime().format(fmt), l.getEndTime().format(fmt))
+                    );
+                }
+            });
         });
     }
 
@@ -103,6 +135,10 @@ public class WorkLogManager {
             //        insertEmployeeV1(emp1);
             //        insertEmployeeV1(emp2);
 
+            LogbookEntry entry1 = new LogbookEntry("Analyse", LocalDateTime.of(2025, 3, 10, 8, 15), LocalDateTime.of(2025, 3, 10, 10, 15));
+            LogbookEntry entry2 = new LogbookEntry("Implementierung", LocalDateTime.of(2025, 3, 10, 10, 30), LocalDateTime.of(2025, 3, 10, 15, 15));
+            LogbookEntry entry3 = new LogbookEntry("Testen", LocalDateTime.of(2025, 3, 10, 11, 15), LocalDateTime.of(2025, 3, 10, 18, 30));
+
             System.out.println("--------- insertEmployee ---------");
             insertEmployeeV3(emp1);
             insertEmployeeV3(emp2);
@@ -111,7 +147,14 @@ public class WorkLogManager {
             emp2.setLastName("Huber-Mayr");
             emp2 = saveEntity(emp2);
 
-            System.out.println("--------- listEmployees ---------");
+            System.out.println("--------- listEmployees (1) ---------");
+            listEmployees();
+
+            System.out.println("--------- addLogbookEntries ---------");
+            emp1 = addLogbookEntries(emp1, entry1, entry2);
+            emp2 = addLogbookEntries(emp2, entry3);
+
+            System.out.println("--------- listEmployees (2) ---------");
             listEmployees();
         } finally {
             JpaUtil.closeEntityManagerFactory();
