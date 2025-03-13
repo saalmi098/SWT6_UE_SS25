@@ -249,6 +249,8 @@ public class WorkLogManager {
 
     public static void main(String[] args) {
         // Datenbank starten: Maven View -> worklog-orm -> Run Configurations -> Start DB
+        // (Start DB erzeugen, falls nicht vorhanden): Maven View -> worklog-orm -> Plugins -> derby -> derby:run
+        //  -> Modify Run Configuration -> Run-Befehl: "derby:stop derby:drop-db derby:run -f pom.xml" -> Speichern
 
         // Persistenz-Manager: In Hibernate "Session", in JPA "EntityManager"
 
