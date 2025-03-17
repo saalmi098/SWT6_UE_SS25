@@ -164,8 +164,7 @@ public class WorkLogManager {
     // Vorteil: Objekte statt Strings -> Typsicher, keine Tippfehler
     private static void listEntriesOfEmployeeQueryDsl(Employee emp) {
         // Project Structure von worklog-orm anpassen, damit die Q-Klassen im Klassenpfad gefunden werden
-        // -> target/generated-sources/annotations/swt6/orm/domain
-        // als "Sources" setzen
+        // -> "target/generated-sources/annotations" als "Sources" setzen
 
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
