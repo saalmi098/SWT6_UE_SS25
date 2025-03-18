@@ -3,8 +3,10 @@ package swt6.spring.basics.ioc.logic.javaconfig;
 import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import swt6.spring.basics.ioc.domain.Employee;
 import swt6.spring.basics.ioc.logic.xmlconfig.WorkLogService;
+import swt6.spring.basics.ioc.util.Log;
 import swt6.spring.basics.ioc.util.Logger;
 
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ public class WorkLogServiceImpl implements WorkLogService {
 
   private Map<Long, Employee> employees = new HashMap<>();
 
-
-  @Setter
+  @Autowired
+  @Log
   private Logger logger;
 
   public WorkLogServiceImpl(Logger logger) {
