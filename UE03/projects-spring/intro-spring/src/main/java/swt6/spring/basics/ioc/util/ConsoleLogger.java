@@ -1,5 +1,6 @@
 package swt6.spring.basics.ioc.util;
 
+@Log(Log.Type.STANDARD)
 public class ConsoleLogger implements Logger {
 
   private String prefix = "Log";

@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
+@Log(Log.Type.FILE)
 public class FileLogger implements Logger {
 
   private PrintWriter writer;

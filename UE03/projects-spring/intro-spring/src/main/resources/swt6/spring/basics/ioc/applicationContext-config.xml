@@ -1,30 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- Variant 1: Define dependencies in XML config file -->
+<!--    <bean id="consoleLogger" class="swt6.spring.basics.ioc.util.ConsoleLogger">-->
+<!--        <property name="prefix" value="INFO"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="fileLogger" class="swt6.spring.basics.ioc.util.FileLogger"-->
+<!--        destroy-method="close"> &lt;!&ndash; Ruft close() von FileLogger auf, wenn Bean zerstört wird &ndash;&gt;-->
+
+<!--        &lt;!&ndash;<property name="fileName" value="log.txt"/>&ndash;&gt;-->
+
+<!--        <constructor-arg value="log.txt"/> &lt;!&ndash; nutzt Param mit index="0" (default) &ndash;&gt;-->
+<!--        &lt;!&ndash; <constructor-arg name="fileName" value="log.txt"/> // nutzt Param mit name="fileName" &ndash;&gt;-->
+<!--    </bean>-->
+
+<!--    <bean id="workLogService-setter-injected" class="swt6.spring.basics.ioc.logic.xmlconfig.WorkLogServiceImpl"-->
+<!--        init-method="init"> &lt;!&ndash; Ruft init() von WorkLogServiceImpl auf, wenn Bean erstellt wird &ndash;&gt;-->
+<!--        <property name="logger" ref="consoleLogger" /> &lt;!&ndash; logger per Setter setzen mit Referenz auf consoleLogger &ndash;&gt;-->
+<!--    </bean>-->
+
+<!--    <bean id="workLogService-constructor-injected" class="swt6.spring.basics.ioc.logic.xmlconfig.WorkLogServiceImpl"-->
+<!--          init-method="init">-->
+<!--        <constructor-arg index="0" ref="fileLogger" /> &lt;!&ndash; index="0" => default &ndash;&gt;-->
+<!--    </bean>-->
+
+    <!-- ===================================================================================================== -->
+
+    <!-- Variant 2: Register beans explicitly and define dependencies using annotations -->
+
+    <context:annotation-config />
+
     <bean id="consoleLogger" class="swt6.spring.basics.ioc.util.ConsoleLogger">
         <property name="prefix" value="INFO"/>
     </bean>
 
     <bean id="fileLogger" class="swt6.spring.basics.ioc.util.FileLogger"
-        destroy-method="close"> <!-- Ruft close() von FileLogger auf, wenn Bean zerstört wird -->
-
-        <!--<property name="fileName" value="log.txt"/>-->
-
-        <constructor-arg value="log.txt"/> <!-- nutzt Param mit index="0" (default) -->
-        <!-- <constructor-arg name="fileName" value="log.txt"/> // nutzt Param mit name="fileName" -->
+        destroy-method="close">
+        <constructor-arg value="log.txt"/>
     </bean>
 
-    <bean id="workLogService-setter-injected" class="swt6.spring.basics.ioc.logic.xmlconfig.WorkLogServiceImpl"
-        init-method="init"> <!-- Ruft init() von WorkLogServiceImpl auf, wenn Bean erstellt wird -->
-        <property name="logger" ref="consoleLogger" /> <!-- logger per Setter setzen mit Referenz auf consoleLogger -->
+    <!-- Problem: Es gibt nun 2 Klassen, die Logger implementieren. Spring weiß nicht, welche Klasse erzeugt werden soll. -->
+    <!-- => UnsatisfiedDependencyException -->
+    <!-- Loesen mit @Named oder @Qualifier -->
+
+    <bean id="workLogService" class="swt6.spring.basics.ioc.logic.annotationconfig.WorkLogServiceImpl">
     </bean>
 
-    <bean id="workLogService-constructor-injected" class="swt6.spring.basics.ioc.logic.xmlconfig.WorkLogServiceImpl"
-          init-method="init">
-        <constructor-arg index="0" ref="fileLogger" /> <!-- index="0" => default -->
-    </bean>
 
 </beans>

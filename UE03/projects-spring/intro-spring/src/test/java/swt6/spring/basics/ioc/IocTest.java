@@ -21,7 +21,8 @@ public class IocTest {
     public void testXmlConfig() {
         try (AbstractApplicationContext factory = new ClassPathXmlApplicationContext("swt6/spring/basics/ioc/applicationContext-config.xml")) {
 //            WorkLogService workLog = factory.getBean("workLogService-setter-injected", WorkLogService.class); // Logs erscheinen in der Konsole
-            WorkLogService workLog = factory.getBean("workLogService-constructor-injected", WorkLogService.class); // Logs erscheinen in File log.txt
+//            WorkLogService workLog = factory.getBean("workLogService-constructor-injected", WorkLogService.class); // Logs erscheinen in File log.txt
+            WorkLogService workLog = factory.getBean("workLogService", WorkLogService.class); // Logs erscheinen in File log.txt
             workLog.findAllEmployees();
             workLog.findEmployeeById(3L);
         }
