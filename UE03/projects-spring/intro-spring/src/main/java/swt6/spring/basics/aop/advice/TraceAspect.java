@@ -3,8 +3,10 @@ package swt6.spring.basics.aop.advice;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.springframework.stereotype.Component;
 
 @Aspect
+@Component
 public class TraceAspect {
 
     // Hinweis Kurztest: Spring Doku anschauen zu Aspect Oriented Programming with Spring --> "Declaring a pointcut"

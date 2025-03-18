@@ -1,10 +1,13 @@
 package swt6.spring.basics.aop.logic;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service("workLogService")
 public class WorkLogServiceImpl implements WorkLogService {
 
     private Map<Long, Employee> employees = new HashMap<>();

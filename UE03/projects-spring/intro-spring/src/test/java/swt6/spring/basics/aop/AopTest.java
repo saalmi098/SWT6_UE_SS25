@@ -23,7 +23,7 @@ public class AopTest {
     @Test
     public void testAOPWithJavaConfig() {
         try (AbstractApplicationContext factory = new AnnotationConfigApplicationContext(AopConfig.class)) {
-            WorkLogService workLogService = factory.getBean("workLogService", WorkLogService.class);
+            WorkLogService workLogService = factory.getBean("workLogService", WorkLogService.class); // name muss mit @Service in WorkLogServiceImpl uebereinstimmen
 
             try {
                 workLogService.findAllEmployees();
