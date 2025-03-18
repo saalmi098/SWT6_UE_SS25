@@ -163,6 +163,9 @@ public class WorkLogManager {
 
     // Vorteil: Objekte statt Strings -> Typsicher, keine Tippfehler
     private static void listEntriesOfEmployeeQueryDsl(Employee emp) {
+        // Project Structure von worklog-orm anpassen, damit die Q-Klassen im Klassenpfad gefunden werden
+        // -> "target/generated-sources/annotations" als "Sources" setzen
+
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         executeInTransaction(em -> {
@@ -249,6 +252,8 @@ public class WorkLogManager {
 
     public static void main(String[] args) {
         // Datenbank starten: Maven View -> worklog-orm -> Run Configurations -> Start DB
+        // (Start DB erzeugen, falls nicht vorhanden): Maven View -> worklog-orm -> Plugins -> derby -> derby:run
+        //  -> Modify Run Configuration -> Run-Befehl: "derby:stop derby:drop-db derby:run -f pom.xml" -> Speichern
 
         // Persistenz-Manager: In Hibernate "Session", in JPA "EntityManager"
 
