@@ -2,8 +2,8 @@ package swt6.spring.basics.ioc.logic.javaconfig;
 
 import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import swt6.spring.basics.ioc.domain.Employee;
 import swt6.spring.basics.ioc.logic.xmlconfig.WorkLogService;
 import swt6.spring.basics.ioc.util.Log;
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 @NoArgsConstructor
 public class WorkLogServiceImpl implements WorkLogService {
 

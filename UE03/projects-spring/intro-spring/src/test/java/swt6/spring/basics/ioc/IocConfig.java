@@ -8,7 +8,7 @@ import swt6.spring.basics.ioc.logic.xmlconfig.WorkLogService;
 import swt6.spring.basics.ioc.util.Logger;
 
 @Configuration
-@ComponentScan(basePackageClasses = {Logger.class}) // durchsucht werden alle Klassen, die in demselben Package wie Logger liegen (+ Subpackages (?))
+@ComponentScan(basePackageClasses = {Logger.class, WorkLogServiceImpl.class}) // durchsucht werden alle Klassen, die in demselben Package wie Logger liegen (+ Subpackages (?))
 public class IocConfig { // = Pendant zu XML-File
 
 //    // Registriert ein Bean unter dem Namen "consoleLogger" (Methodenname)
