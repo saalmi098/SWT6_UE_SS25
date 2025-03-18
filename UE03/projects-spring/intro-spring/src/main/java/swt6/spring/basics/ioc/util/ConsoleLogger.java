@@ -1,6 +1,9 @@
 package swt6.spring.basics.ioc.util;
 
+import org.springframework.stereotype.Component;
+
 @Log(Log.Type.STANDARD)
+@Component // Bean bei der Bean-Factory registrieren (base-package muss angegeben werden in XML-Config-File)
 public class ConsoleLogger implements Logger {
 
   private String prefix = "Log";

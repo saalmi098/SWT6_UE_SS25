@@ -34,23 +34,29 @@
 
     <!-- Variant 2: Register beans explicitly and define dependencies using annotations -->
 
-    <context:annotation-config />
+<!--    <context:annotation-config />-->
 
-    <bean id="consoleLogger" class="swt6.spring.basics.ioc.util.ConsoleLogger">
-        <property name="prefix" value="INFO"/>
-    </bean>
+<!--    <bean id="consoleLogger" class="swt6.spring.basics.ioc.util.ConsoleLogger">-->
+<!--        <property name="prefix" value="INFO"/>-->
+<!--    </bean>-->
 
-    <bean id="fileLogger" class="swt6.spring.basics.ioc.util.FileLogger"
-        destroy-method="close">
-        <constructor-arg value="log.txt"/>
-    </bean>
+<!--    <bean id="fileLogger" class="swt6.spring.basics.ioc.util.FileLogger"-->
+<!--        destroy-method="close">-->
+<!--        <constructor-arg value="log.txt"/>-->
+<!--    </bean>-->
 
-    <!-- Problem: Es gibt nun 2 Klassen, die Logger implementieren. Spring weiß nicht, welche Klasse erzeugt werden soll. -->
-    <!-- => UnsatisfiedDependencyException -->
-    <!-- Loesen mit @Named oder @Qualifier -->
+<!--    &lt;!&ndash; Problem: Es gibt nun 2 Klassen, die Logger implementieren. Spring weiß nicht, welche Klasse erzeugt werden soll. &ndash;&gt;-->
+<!--    &lt;!&ndash; => UnsatisfiedDependencyException &ndash;&gt;-->
+<!--    &lt;!&ndash; Loesen mit @Named oder @Qualifier &ndash;&gt;-->
 
-    <bean id="workLogService" class="swt6.spring.basics.ioc.logic.annotationconfig.WorkLogServiceImpl">
-    </bean>
+<!--    <bean id="workLogService" class="swt6.spring.basics.ioc.logic.annotationconfig.WorkLogServiceImpl">-->
+<!--    </bean>-->
+
+    <!-- ===================================================================================================== -->
+
+    <!-- Variant 3: Register beans automatically using a component scan -->
+    <context:component-scan base-package="swt6.spring.basics.ioc.util,
+                                          swt6.spring.basics.ioc.logic.annotationconfig" />
 
 
 </beans>

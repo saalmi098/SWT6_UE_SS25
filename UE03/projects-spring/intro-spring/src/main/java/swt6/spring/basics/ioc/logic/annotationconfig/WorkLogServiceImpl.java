@@ -6,6 +6,8 @@ import jakarta.inject.Named;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import swt6.spring.basics.ioc.domain.Employee;
 import swt6.spring.basics.ioc.logic.xmlconfig.WorkLogService;
 import swt6.spring.basics.ioc.util.Log;
@@ -15,6 +17,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+//@Component("workLogService") // (Spring)
+@Service("workLogService") // ... "das ist eine Komponente, die Geschaeftslogik enthaelt" (Spring)
+//@Named("workLogService") // (Java CDI Standard)
 
 @NoArgsConstructor
 public class WorkLogServiceImpl implements WorkLogService {
