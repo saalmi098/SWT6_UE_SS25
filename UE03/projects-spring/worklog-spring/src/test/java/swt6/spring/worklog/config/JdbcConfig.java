@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.jdbc.core.JdbcTemplate;
 import swt6.spring.worklog.dao.EmployeeDao;
 import swt6.spring.worklog.dao.jdbc.EmployeeDaoJdbc;
 
@@ -45,11 +46,16 @@ public class JdbcConfig {
 
     // ========================= DAO DEFINITIONS ================================
 
+    @Bean
+    public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+
     // Factory-Methode zur Erzeugung eines EmployeeDao-Objekts
     @Bean
-    public EmployeeDao employeeDaoJdbc(DataSource dataSource) {
+    public EmployeeDao employeeDaoJdbc(JdbcTemplate jdbcTemplate) {
         EmployeeDaoJdbc employeeDaoJdbc = new EmployeeDaoJdbc();
-        employeeDaoJdbc.setDataSource(dataSource);
+        employeeDaoJdbc.setJdbcTemplate(jdbcTemplate);
         return employeeDaoJdbc;
     }
 

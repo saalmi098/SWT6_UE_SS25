@@ -57,16 +57,14 @@ public class DaoTest {
     @SuppressWarnings("Duplicates")
     @Test
     public void testJpa() {
-        try (AbstractApplicationContext factory =
-                     new AnnotationConfigApplicationContext()) {
+        try (AbstractApplicationContext factory = new AnnotationConfigApplicationContext()) {
 
         }
     }
 
     @Test
     public void testSpringData() {
-        try (AbstractApplicationContext factory =
-                     new AnnotationConfigApplicationContext()) {
+        try (AbstractApplicationContext factory = new AnnotationConfigApplicationContext()) {
 
         }
     }
