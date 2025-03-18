@@ -4,7 +4,7 @@ public class ConsoleLogger implements Logger {
 
   private String prefix = "Log";
 
-  public void setPrefix(String prefix) {
+  public void setPrefix(String prefix) { // ermoeglicht auch das Setzen ueber XML-Config-File
     this.prefix = prefix;
   }
 

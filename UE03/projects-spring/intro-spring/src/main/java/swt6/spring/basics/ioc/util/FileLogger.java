@@ -1,6 +1,5 @@
 package swt6.spring.basics.ioc.util;
 
-import jakarta.inject.Named;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
