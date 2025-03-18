@@ -52,6 +52,7 @@ public class EmployeeDaoJdbc implements EmployeeDao {
     }
 
     // Version 3: Data access using Spring's JdbcTemplate and KeyHolder
+    @Override
     public void insert(final Employee e) throws DataAccessException {
         final String sql = "insert into EMPLOYEE (FIRSTNAME, LASTNAME, DATEOFBIRTH) values (?, ?, ?)";
 
@@ -83,7 +84,26 @@ public class EmployeeDaoJdbc implements EmployeeDao {
     }
 
     @Override
-    public Employee merge(Employee entity) {
-        return null;
+    public Employee merge(Employee empl) {
+        if (empl.getId() == null) {
+            insert(empl);
+        } else {
+            update(empl);
+        }
+
+        return empl;
+    }
+
+    private void update(final Employee e) throws DataAccessException {
+        // Kopiert von insert2
+
+        final String sql = "update EMPLOYEE set FIRSTNAME=?, LASTNAME=?, DATEOFBIRTH=? where ID=? ";
+
+        jdbcTemplate.update(
+                sql,
+                e.getFirstName(),
+                e.getLastName(),
+                Date.valueOf(e.getDateOfBirth()),
+                e.getId());
     }
 }

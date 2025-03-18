@@ -47,10 +47,10 @@ public class DaoTest {
             emplDao.insert(empl1);
             System.out.println("empl1 = " + (empl1 == null ? (null) : empl1.toString()));
 
-//            printTitle("update employee", 60, '-');
-//            empl1.setFirstName("Jaquira");
-//            empl1 = emplDao.merge(empl1);
-//            System.out.println("empl1 = " + (empl1 == null ? (null) : empl1.toString()));
+            printTitle("update employee", 60, '-');
+            empl1.setFirstName("Jaquira");
+            empl1 = emplDao.merge(empl1);
+            System.out.println("empl1 = " + (empl1 == null ? (null) : empl1.toString()));
         }
     }
 
