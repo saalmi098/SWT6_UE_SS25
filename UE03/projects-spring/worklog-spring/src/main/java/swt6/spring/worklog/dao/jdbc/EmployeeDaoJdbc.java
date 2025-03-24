@@ -20,7 +20,7 @@ public class EmployeeDaoJdbc implements EmployeeDao {
 
     @Setter
 //    private DataSource dataSource;
-    private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate; // = DAO-Template (s. Vorlesungsfolien)
 
     // Version 1: Data access code without Spring
     public void insert1(final Employee e) throws DataAccessException {
