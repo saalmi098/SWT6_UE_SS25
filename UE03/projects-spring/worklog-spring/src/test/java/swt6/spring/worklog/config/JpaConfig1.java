@@ -1,7 +1,9 @@
 package swt6.spring.worklog.config;
 
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -14,11 +16,15 @@ import swt6.spring.worklog.dao.GenericDao;
 import swt6.spring.worklog.dao.jpa.EmployeeDaoJpa;
 import swt6.spring.worklog.logic.WorkLogService;
 import swt6.spring.worklog.logic.WorkLogServiceImpl1;
+import swt6.spring.worklog.ui.WorkLogViewModel;
+import swt6.spring.worklog.ui.WorkLogViewModelImpl;
+import swt6.util.advice.JpaInterceptor;
 
 @Configuration
 @Import(JpaDataSourceConfig.class)
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackageClasses = GenericDao.class)
+@EnableAspectJAutoProxy
 public class JpaConfig1 {
 
     @Bean
@@ -31,6 +37,11 @@ public class JpaConfig1 {
         var transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf.getObject());
         return transactionManager;
+    }
+
+    @Bean
+    public JpaInterceptor jpaInterceptor(LocalContainerEntityManagerFactoryBean emf) {
+        return new JpaInterceptor(emf.getObject());
     }
 
     // ============================== DATA ACCESS LAYER =============================
@@ -48,4 +59,9 @@ public class JpaConfig1 {
     }
 
     // ============================== PRESENTATION LAYER  ===========================
+
+    @Bean
+    public WorkLogViewModel workLogViewModel(WorkLogService workLogService) {
+        return new WorkLogViewModelImpl(workLogService);
+    }
 }
