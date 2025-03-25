@@ -2,17 +2,16 @@ package swt6.spring.worklog.dao.jdbc;
 
 import lombok.Setter;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import swt6.spring.worklog.dao.EmployeeDao;
 import swt6.spring.worklog.domain.Employee;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,13 +73,23 @@ public class EmployeeDaoJdbc implements EmployeeDao {
     }
 
     @Override
-    public Optional<Employee> findById(Long aLong) {
-        return Optional.empty();
+    public Optional<Employee> findById(Long id) {
+        final String sql = "select ID, FIRSTNAME, LASTNAME, DATEOFBIRTH from EMPLOYEE where ID = ?";
+        List<Employee> empList = jdbcTemplate.query(sql, new EmployeeMapper(), id);
+        if (empList.isEmpty()) {
+            return Optional.empty();
+        } if (empList.size() == 1) {
+            return Optional.of(empList.getFirst());
+        }
+        else {
+            throw new IncorrectResultSizeDataAccessException(1, empList.size());
+        }
     }
 
     @Override
     public List<Employee> findAll() {
-        return List.of();
+        final String sql = "select ID, FIRSTNAME, LASTNAME, DATEOFBIRTH from EMPLOYEE";
+        return jdbcTemplate.query(sql, new EmployeeMapper());
     }
 
     @Override
@@ -105,5 +114,17 @@ public class EmployeeDaoJdbc implements EmployeeDao {
                 e.getLastName(),
                 Date.valueOf(e.getDateOfBirth()),
                 e.getId());
+    }
+
+    protected static class EmployeeMapper implements RowMapper<Employee> {
+        @Override
+        public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Employee e = new Employee();
+            e.setId(rs.getLong("ID")); // rs.getLong(1)
+            e.setFirstName(rs.getString("FIRSTNAME")); // rs.getString(2)
+            e.setLastName(rs.getString("LASTNAME")); // rs.getString(3)
+            e.setDateOfBirth(rs.getDate("DATEOFBIRTH").toLocalDate()); // rs.getDate(4).toLocalDate()
+            return e;
+        }
     }
 }

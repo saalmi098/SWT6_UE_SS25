@@ -13,15 +13,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static swt6.util.PrintUtil.printTitle;
 
-public class DaoTest {
+public class JdbcDaoTest {
 
     private void createSchema(DataSource ds, String ddlScript) {
         try {
             DbScriptRunner scriptRunner = new DbScriptRunner(ds.getConnection());
-            InputStream is = DaoTest.class.getClassLoader().getResourceAsStream(ddlScript);
+            InputStream is = JdbcDaoTest.class.getClassLoader().getResourceAsStream(ddlScript);
             if (is == null) throw new IllegalArgumentException(
                     String.format("File %s not found in classpath.", ddlScript));
             scriptRunner.runScript(new InputStreamReader(is));
@@ -51,21 +52,16 @@ public class DaoTest {
             empl1.setFirstName("Jaquira");
             empl1 = emplDao.merge(empl1);
             System.out.println("empl1 = " + (empl1 == null ? (null) : empl1.toString()));
-        }
-    }
 
-    @SuppressWarnings("Duplicates")
-    @Test
-    public void testJpa() {
-        try (AbstractApplicationContext factory = new AnnotationConfigApplicationContext()) {
-
-        }
-    }
-
-    @Test
-    public void testSpringData() {
-        try (AbstractApplicationContext factory = new AnnotationConfigApplicationContext()) {
-
+            printTitle("find employee", 60, '-');
+            Optional<Employee> empl = emplDao.findById(1L);
+            empl.ifPresentOrElse(e -> System.out.println("empl =" + e),
+                    () -> System.out.println("empl not found"));
+            empl = emplDao.findById(100L);
+            empl.ifPresentOrElse(e -> System.out.println("empl =" + e),
+                    () -> System.out.println("empl not found"));
+            printTitle("find all employees", 60, '-');
+            emplDao.findAll().forEach(System.out::println);
         }
     }
 }
