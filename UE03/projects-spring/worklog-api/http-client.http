@@ -3,3 +3,9 @@ GET http://localhost:8080/worklog/
 
 ### GET all employees
 GET http://localhost:8080/worklog/employees
+
+### GET employee by id (success)
+GET http://localhost:8080/worklog/employees/1
+
+### GET employee by id (not found)
+GET http://localhost:8080/worklog/employees/999
