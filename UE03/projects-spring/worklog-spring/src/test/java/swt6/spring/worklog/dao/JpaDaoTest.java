@@ -19,7 +19,6 @@ import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {JpaConfig1.class})
-@EnableTransactionManagement
 public class JpaDaoTest {
 
     @Autowired
