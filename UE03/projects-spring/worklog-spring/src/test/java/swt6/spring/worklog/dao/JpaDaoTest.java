@@ -32,7 +32,7 @@ public class JpaDaoTest {
     public void testInsertUpdate() {
         PrintUtil.printTitle("insert/update employee", 60, '-');
 
-        // V1: Explizite Transaktion
+        // V1: Explizite Transaktion -> Problem: Vermischt Geschaeftslogik-Code mit Technologie-Code
 //        JpaUtil.executeInTransaction(emf, () -> {
 //            Employee empl1 = new Employee("Josefine", "Feichtlbauer", LocalDate.of(1970, 10, 26));
 //            employeeDao.insert(empl1);
