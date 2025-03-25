@@ -52,12 +52,10 @@ public class JpaDaoTest {
 
         PrintUtil.printTitle("find employee", 60, '-');
         Optional<Employee> empl = employeeDao.findById(1L);
-        System.out.printf(
-                "empl = " + empl.map(Employee::toString).orElse("<not found>"));
+        System.out.printf("empl = " + empl.map(Employee::toString).orElse("<not found>"));
 
         empl = employeeDao.findById(100L);
-        System.out.printf(
-                "empl = " + empl.map(Employee::toString).orElse("<not found>"));
+        System.out.printf("empl = " + empl.map(Employee::toString).orElse("<not found>"));
     }
 
     @Test
