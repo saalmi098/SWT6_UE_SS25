@@ -1,35 +1,35 @@
 package swt6.spring.worklog.logic;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import swt6.spring.worklog.dao.EmployeeDao;
+import swt6.spring.worklog.dao.EmployeeRepository;
 import swt6.spring.worklog.domain.Employee;
 
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Transactional // jede Methode wird in einer Transaktion ausgefuehrt
-public class WorkLogServiceImpl1 implements WorkLogService {
+@Transactional
+@Service("workLogService")
+public class WorkLogServiceImpl2 implements WorkLogService {
 
-    private final EmployeeDao employeeDao;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public Employee syncEmployee(Employee employee) {
-        return employeeDao.merge(employee);
+        return employeeRepository.save(employee);
     }
 
     @Override
     @Transactional(readOnly = true)
-    // // explizit angeben, dass es sich um eine Leseoperation handelt (Repeatable Read Problem)
-    // Spring macht auch Optimierungen (mehrere lesende Operationen in der selben DB-Connection)
     public Optional<Employee> findEmployeeById(Long id) {
-        return employeeDao.findById(id);
+        return employeeRepository.findById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Employee> findAllEmployees() {
-        return employeeDao.findAll();
+        return employeeRepository.findAll();
     }
 }
