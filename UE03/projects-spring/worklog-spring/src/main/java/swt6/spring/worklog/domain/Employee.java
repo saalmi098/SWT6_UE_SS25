@@ -2,7 +2,6 @@ package swt6.spring.worklog.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +23,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Employee implements Serializable {
-    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)

@@ -20,7 +20,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class LogbookEntry implements Serializable, Comparable<LogbookEntry> {
-    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
