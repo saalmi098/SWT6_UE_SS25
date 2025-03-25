@@ -3,9 +3,20 @@ GET http://localhost:8080/worklog/
 
 ### GET all employees
 GET http://localhost:8080/worklog/employees
+Accept: application/json
 
 ### GET employee by id (success)
 GET http://localhost:8080/worklog/employees/1
+Accept: application/json
 
 ### GET employee by id (not found)
 GET http://localhost:8080/worklog/employees/999
+Accept: application/json
+
+### OpenAPI document
+http://localhost:8080/v3/api-docs
+Accept: application/json
+
+### OpenAPI UI
+http://localhost:8080/swagger-ui/index.html
+Accept: application/json
