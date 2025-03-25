@@ -1,6 +1,6 @@
 package swt6.spring.worklog.dao;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import swt6.spring.worklog.config.JdbcConfig;
