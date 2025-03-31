@@ -26,7 +26,7 @@ public class IocConfig { // = Pendant zu XML-File
 //
 //    @Bean
 //    public WorkLogService workLog(@Log Logger logger) {
-//        return new WorkLogServiceImpl(consoleLogger());
+//        return new WorkLogServiceImpl(logger);
 //    }
 //
 //    @Bean
