@@ -15,3 +15,6 @@ await Commands.AddCustomersAsync();
 
 PrintTitle("ListCustomersAsync", '-');
 await Commands.ListCustomersAsync();
+
+PrintTitle("AddOrdersAsync", '-');
+await Commands.AddOrdersAsync();

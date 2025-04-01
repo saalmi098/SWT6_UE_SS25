@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace IntroEF.Domain;
+﻿namespace IntroEF.Domain;
 
 //[Table("TBL_CUSTOMER")] // Attribute spielen in EF eher eine untergeordnete Rolle (daher wieder auskommentiert) -> Fluent-API
 public class Customer(Guid id, string name, Rating rating)
@@ -23,6 +20,10 @@ public class Customer(Guid id, string name, Rating rating)
 
     //[Column(TypeName = "decimal(18, 2)")]
     public decimal? TotalRevenue { get; set; }
+
+    public Address? Address { get; set; }
+
+    public IList<Order> Orders { get; set; } = []; // 1:n-Beziehung
 
     public override string ToString() => $"Customer {{ Id: {Id}, Name: {Name}, " +
                                          $"TotalRevenue: {TotalRevenue} }}";
