@@ -9,3 +9,9 @@ await using (var db = new OrderManagementContext())
 {
     await DatabaseUtil.CreateDatabaseAsync(db, recreate: true);
 }
+
+PrintTitle("AddCustomersAsync", '-');
+await Commands.AddCustomersAsync();
+
+PrintTitle("ListCustomersAsync", '-');
+await Commands.ListCustomersAsync();

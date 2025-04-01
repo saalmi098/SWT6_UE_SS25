@@ -17,7 +17,7 @@ public class Customer(Guid id, string name, Rating rating)
 
     //[Required]
     //[Column("COL_NAME")]
-    [Required, Column("COL_NAME")]
+    //[Required, Column("COL_NAME")]
     public string Name { get; set; } = name;
     public Rating Rating { get; set; } = rating;
 
